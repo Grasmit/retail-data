@@ -1,49 +1,54 @@
-Overview
-========
+# retail-data-pipeline
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+This pipe line start with extracting data from csv file and ends up in Metabase dashboard
 
-Project Contents
-================
+## **Dataset**
 
-Your Astro project contains the following files and folders:
+https://www.kaggle.com/datasets/tunguz/online-retail
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes two example DAGs:
-    - `example_dag_basic`: This DAG shows a simple ETL data pipeline example with three TaskFlow API tasks that run daily.
-    - `example_dag_advanced`: This advanced DAG showcases a variety of Airflow features like branching, Jinja templates, task groups and several Airflow operators.
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+| Column | Description |
+| --- | --- |
+| InvoiceNo | Invoice number. Nominal, a 6-digit integral number uniquely assigned to each transaction. If this code starts with letter 'c', it indicates a cancellation. |
+| StockCode | Product (item) code. Nominal, a 5-digit integral number uniquely assigned to each distinct product. |
+| Description | Product (item) name. Nominal. |
+| Quantity | The quantities of each product (item) per transaction. Numeric. |
+| InvoiceDate | Invice Date and time. Numeric, the day and time when each transaction was generated. |
+| UnitPrice | Unit price. Numeric, Product price per unit in sterling. |
+| CustomerID | Customer number. Nominal, a 5-digit integral number uniquely assigned to each customer. |
+| Country | Country name. Nominal, the name of the country where each customer resides. |
 
-Deploy Your Project Locally
-===========================
+# Pipeline
 
-1. Start Airflow on your local machine by running 'astro dev start'.
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/38742935-7215-491c-ba2e-cf11716bbce7/344ba11b-50ae-4a6c-92ab-3cf8cd1c4490/Untitled.png)
 
-This command will spin up 4 Docker containers on your machine, each for a different Airflow component:
+Pipeline include following steps 
 
-- Postgres: Airflow's Metadata Database
-- Webserver: The Airflow component responsible for rendering the Airflow UI
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- Triggerer: The Airflow component responsible for triggering deferred tasks
+- Ingest the raw data to google storage bucket and then into big query
+- Run quality check of ingested bigquery schema using Soda
+- Building dbt model to transform data
+- Running data quality check using Soda
+- Building dbt model for report
+- Running data quality check using Soda
+- Creating dashboard in Metabase
 
-2. Verify that all 4 Docker containers were created by running 'docker ps'.
+# Data Ingestion
 
-Note: Running 'astro dev start' will start your project with the Airflow Webserver exposed at port 8080 and Postgres exposed at port 5432. If you already have either of those ports allocated, you can either [stop your existing Docker containers or change the port](https://docs.astronomer.io/astro/test-and-troubleshoot-locally#ports-are-not-available).
+![gcs.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/38742935-7215-491c-ba2e-cf11716bbce7/55eb5d18-0a24-40d0-8806-48669a309e6d/gcs.png)
 
-3. Access the Airflow UI for your local Airflow project. To do so, go to http://localhost:8080/ and log in with 'admin' for both your Username and Password.
+![big_query_ingested.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/38742935-7215-491c-ba2e-cf11716bbce7/62c79fa0-8fbc-4939-b069-1b35b5545c4d/big_query_ingested.png)
 
-You should also be able to access your Postgres Database at 'localhost:5432/postgres'.
+# Data modeling
 
-Deploy Your Project to Astronomer
-=================================
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/38742935-7215-491c-ba2e-cf11716bbce7/3e384b7a-a141-40ba-99b7-390fe8be7ef3/Untitled.png)
 
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://docs.astronomer.io/cloud/deploy-code/
+Build dbt model to transform the data
 
-Contact
-=======
+![tranformation.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/38742935-7215-491c-ba2e-cf11716bbce7/d9294aaa-a57a-4139-8941-18b33ba8a8cb/tranformation.png)
 
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
+# Final Pipeline
+
+![final_pipeline.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/38742935-7215-491c-ba2e-cf11716bbce7/78c10b9d-8b21-470d-acef-948c333b9e85/final_pipeline.png)
+
+# Metabase Dashboard
+
+![dashboard.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/38742935-7215-491c-ba2e-cf11716bbce7/d1236499-f925-436d-b038-1b0377f58e5e/dashboard.png)
