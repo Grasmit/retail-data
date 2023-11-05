@@ -5,7 +5,7 @@ retail:
     type: bigquery
     method: service-account
     keyfile: /usr/local/airflow/include/gcp/service_account.json
-    project: enduring-guard-398518
+    project: 398518
     dataset: retail
     threads: 1
     timeout_seconds: 300
