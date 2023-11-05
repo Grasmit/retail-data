@@ -6,9 +6,9 @@ data_source retail:
     - https://www.googleapis.com/auth/bigquery
     - https://www.googleapis.com/auth/cloud-platform
     - https://www.googleapis.com/auth/drive
-    project_id: '398518'
+    project_id: 'xxxxxxxxxxxxxxxxxxxxx'
     dataset: retail
 soda_cloud:
   host: cloud.soda.io
-  api_key_id: b58be86789d6-9063a
-  api_key_secret: dUyGYJJ8Tie5Y48rL4Wsw8UQg0qq3PCsc
+  api_key_id: xxxxxxxxxxxxxx-xxxxxxxxxx
+  api_key_secret: xxxxxxxxxxxxxxxxxxxxxx
